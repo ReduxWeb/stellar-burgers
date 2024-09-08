@@ -99,12 +99,12 @@ export const authSlice = createSlice({
       });
   },
   selectors: {
-    userData: (state) => state.user,
+    getUserData: (state) => state.user,
     isLoadingPage: (state) => state.isLoading,
     errorMessage: (state) => state.errorMessage,
     isAuthChecked: (state) => state.isAuthChecked
   }
 });
 
-export const { userData, isAuthChecked, errorMessage, isLoadingPage } =
+export const { getUserData, isAuthChecked, errorMessage, isLoadingPage } =
   authSlice.selectors;
