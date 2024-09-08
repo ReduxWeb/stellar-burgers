@@ -1,4 +1,12 @@
-import { ConstructorPage, NotFound404, Login, Register } from '@pages';
+import {
+  ConstructorPage,
+  NotFound404,
+  Login,
+  Register,
+  Feed,
+  ResetPassword,
+  Profile
+} from '@pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -28,6 +36,16 @@ const App = () => {
         <AppHeader />
         <Routes location={background || location}>
           <Route index element={<ConstructorPage />} />
+          <Route path='/feed' element={<Feed />} />
+          <Route
+            path='/profile'
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route path='/forgot-password' element={<ResetPassword />} />
           <Route
             path='/login'
             element={
