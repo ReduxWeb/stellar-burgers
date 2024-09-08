@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import {
   getUserAction,
@@ -24,7 +24,14 @@ const initialState: TInitialState = {
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    setUser: (state, action: PayloadAction<TUser | null>) => {
+      state.user = action.payload;
+    },
+    setIsAuthChecked: (state, action: PayloadAction<boolean>) => {
+      state.isAuthChecked = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUserAction.pending, (state) => {
@@ -40,7 +47,8 @@ export const authSlice = createSlice({
       .addCase(getUserAction.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
-        state.errorMessage = action.error.message;
+        state.isAuthChecked = true;
+        state.errorMessage = null;
       })
       .addCase(loginAction.pending, (state) => {
         state.isLoading = true;
@@ -108,3 +116,6 @@ export const authSlice = createSlice({
 
 export const { getUserData, isAuthChecked, errorMessage, isLoadingPage } =
   authSlice.selectors;
+export const selectIsAuthChecked = (state: { auth: TInitialState }) =>
+  state.auth.isAuthChecked;
+export const { setUser, setIsAuthChecked } = authSlice.actions;

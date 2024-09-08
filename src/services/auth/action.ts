@@ -1,3 +1,4 @@
+import { TUser } from './../../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   getUserApi,
@@ -9,6 +10,7 @@ import {
   logoutApi
 } from '@api';
 import { setCookie, deleteCookie } from '../../utils/cookie';
+import { setIsAuthChecked, setUser } from './slice';
 
 // Получаем пользователя
 export const getUserAction = createAsyncThunk(
