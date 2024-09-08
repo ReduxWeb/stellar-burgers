@@ -1,5 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { authSlice } from './auth/slice';
+import { burgerConstructorSlice } from './burgerConstructor/slice';
 
 import {
   TypedUseSelectorHook,
@@ -8,7 +9,8 @@ import {
 } from 'react-redux';
 
 const rootReducer = combineReducers({
-  [authSlice.reducerPath]: authSlice.reducer
+  [authSlice.reducerPath]: authSlice.reducer,
+  [burgerConstructorSlice.reducerPath]: burgerConstructorSlice.reducer
 }); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
