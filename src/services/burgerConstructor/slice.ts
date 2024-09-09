@@ -1,70 +1,70 @@
-import { createSlice, PayloadAction, nanoid } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { createSlice } from '@reduxjs/toolkit';
+import { TConstructorIngredient, TOrder } from '@utils-types';
 
-type TBurgerConstructorState = {
+type TInitialState = {
   constructorItems: {
     bun: TConstructorIngredient | null;
     ingredients: TConstructorIngredient[];
   };
+  orderRequest: boolean;
+  orderModalData: TOrder | null;
   isLoading: boolean;
   errorMessage?: string | null;
 };
 
-const initialState: TBurgerConstructorState = {
+export const initialState: TInitialState = {
   constructorItems: {
     bun: null,
     ingredients: []
   },
+  orderRequest: false,
+  orderModalData: null,
   isLoading: false
 };
 
 export const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
-  selectors: {
-    constructorState: (state) => state.constructorItems,
-    constructorLoading: (state) => state.isLoading
-  },
   reducers: {
-    // Добавить
-    addIngredient: {
-      reducer: (
-        state: TBurgerConstructorState,
-        action: PayloadAction<TConstructorIngredient>
-      ) => {
-        if (action.payload.type === 'bun') {
-          state.constructorItems.bun = action.payload;
-        } else {
-          state.constructorItems.ingredients.push(action.payload);
-        }
-      },
-      prepare: (ingredient: TIngredient) => ({
-        payload: { ...ingredient, id: nanoid() }
-      })
+    addIngredients: (state, action) => {
+      state.constructorItems.ingredients.push(action.payload);
     },
-    // Удалить
-    removeIngredient: (state, action: PayloadAction<string>) => {
+    addBun: (state, action) => {
+      state.constructorItems.bun = action.payload;
+    },
+    removeIngredient: (state, action) => {
       state.constructorItems.ingredients =
         state.constructorItems.ingredients.filter(
           (ingredient) => ingredient.id !== action.payload
         );
     },
-    // Очистить
+    setOrderRequest: (state, action) => {
+      state.orderRequest = action.payload;
+    },
+    setModalData: (state, action) => {
+      state.orderModalData = action.payload;
+    },
     clearConstructor: (state) => {
       state.constructorItems.bun = null;
       state.constructorItems.ingredients = [];
+      state.orderRequest = false;
+      state.orderModalData = null;
     },
-    // Обновить
-    updateAll: (state, action: PayloadAction<TConstructorIngredient[]>) => {
-      state.constructorItems.ingredients = action.payload;
+    moveIngredient: (state, action) => {
+      const { fromIndex, toIndex } = action.payload;
+      const ingredients = state.constructorItems.ingredients;
+      const [movedIngredient] = ingredients.splice(fromIndex, 1);
+      ingredients.splice(toIndex, 0, movedIngredient);
+      state.constructorItems.ingredients = ingredients;
     }
   }
 });
-
-export const { addIngredient, removeIngredient, clearConstructor, updateAll } =
-  burgerConstructorSlice.actions;
-
-export const { constructorState, constructorLoading } =
-  burgerConstructorSlice.selectors;
-
-export default burgerConstructorSlice.reducer;
+export const {
+  addBun,
+  addIngredients,
+  removeIngredient,
+  setOrderRequest,
+  setModalData,
+  moveIngredient,
+  clearConstructor
+} = burgerConstructorSlice.actions;
