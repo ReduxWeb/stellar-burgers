@@ -26,7 +26,7 @@ export const ProtectedRoute = ({
     return <Navigate to='/login' state={{ from: location }} />;
   }
 
-  if (!authChecked) {
+  if (user && !authChecked) {
     return <Preloader />;
   }
 
