@@ -33,8 +33,10 @@ export const ingredientsSlice = createSlice({
       });
   },
   selectors: {
-    getIngredientsState: (state) => state.ingredients
+    getIngredientsState: (state) => state.ingredients,
+    getIngredientsLoading: (state) => state.isLoading
   }
 });
 
-export const { getIngredientsState } = ingredientsSlice.selectors;
+export const { getIngredientsState, getIngredientsLoading } =
+  ingredientsSlice.selectors;

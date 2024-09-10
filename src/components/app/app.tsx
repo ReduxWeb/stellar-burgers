@@ -19,10 +19,11 @@ import styles from './app.module.css';
 import { AppHeader, IngredientDetails } from '@components';
 import { getUserAction } from '../../services/auth/action';
 import { getIngredients } from '../../services/ingredients/action';
+import { Modal, OrderInfo } from '@components';
 
 const App = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const background = location.state?.background;
 
@@ -90,6 +91,39 @@ const App = () => {
           />
           <Route path='*' element={<NotFound404 />} />
         </Routes>
+        {background && (
+          <Routes>
+            <Route
+              path='/feed/:number'
+              element={
+                <Modal title={''} onClose={() => navigate(-1)}>
+                  <OrderInfo />
+                </Modal>
+              }
+            />
+            <Route
+              path='/ingredients/:id'
+              element={
+                <Modal
+                  title={'Детали ингредиента'}
+                  onClose={() => navigate(-1)}
+                >
+                  <IngredientDetails />
+                </Modal>
+              }
+            />
+            <Route
+              path='/profile/orders/:number'
+              element={
+                <Modal title={''} onClose={() => navigate(-1)}>
+                  <ProtectedRoute>
+                    <OrderInfo />
+                  </ProtectedRoute>
+                </Modal>
+              }
+            />
+          </Routes>
+        )}
       </div>
     </>
   );
