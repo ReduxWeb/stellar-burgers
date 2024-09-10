@@ -19,11 +19,12 @@ export const ingredientsSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(getIngredients.pending, (state, action) => {
+      .addCase(getIngredients.pending, (state) => {
         state.isLoading = true;
+        state.errorMessage = null;
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
-        state.isLoading = true;
+        state.isLoading = false;
         state.ingredients = action.payload;
       })
       .addCase(getIngredients.rejected, (state, action) => {

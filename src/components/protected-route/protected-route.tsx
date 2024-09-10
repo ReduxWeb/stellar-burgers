@@ -13,21 +13,21 @@ export const ProtectedRoute = ({
   onlyUnAuth = false,
   children
 }: TProtectedRouteProps) => {
-  const authChecked = useSelector(isAuthChecked);
-  console.log(authChecked);
-  const user = useSelector(getUserData);
   const location = useLocation();
+  const authChecked = useSelector(isAuthChecked);
+  const user = useSelector(getUserData);
+  const from = location.state?.from || { pathname: '/' };
+
+  if (user && onlyUnAuth) {
+    return <Navigate to={from} state={location} replace />;
+  }
+
+  if (!user && !onlyUnAuth) {
+    return <Navigate to='/login' state={{ from: location }} />;
+  }
 
   if (!authChecked) {
     return <Preloader />;
-  }
-  if (!onlyUnAuth && !user) {
-    return <Navigate replace to='/login' state={{ from: location }} />;
-  }
-
-  if (onlyUnAuth && user) {
-    const from = location.state?.from || { pathname: '/' };
-    return <Navigate replace to={from} />;
   }
 
   return children;

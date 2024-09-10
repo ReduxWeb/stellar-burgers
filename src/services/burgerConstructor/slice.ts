@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { TConstructorIngredient, TOrder } from '@utils-types';
+import { createSlice, nanoid, PayloadAction } from '@reduxjs/toolkit';
+import { TConstructorIngredient, TIngredient, TOrder } from '@utils-types';
 
 type TInitialState = {
   constructorItems: {
@@ -26,16 +26,25 @@ export const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredients: (state, action) => {
-      state.constructorItems.ingredients.push(action.payload);
+    addIngredient: {
+      reducer: (state, { payload }: PayloadAction<TConstructorIngredient>) => {
+        if (payload.type === 'bun') {
+          state.constructorItems.bun = payload;
+        } else {
+          state.constructorItems.ingredients.push(payload);
+        }
+      },
+      prepare: (ingredient: TIngredient) => ({
+        payload: { ...ingredient, id: nanoid() }
+      })
     },
-    addBun: (state, action) => {
-      state.constructorItems.bun = action.payload;
-    },
-    removeIngredient: (state, action) => {
+    removeIngredient: (
+      state,
+      { payload }: PayloadAction<TConstructorIngredient>
+    ) => {
       state.constructorItems.ingredients =
         state.constructorItems.ingredients.filter(
-          (ingredient) => ingredient.id !== action.payload
+          (item) => item.id !== payload.id
         );
     },
     setOrderRequest: (state, action) => {
@@ -57,11 +66,17 @@ export const burgerConstructorSlice = createSlice({
       ingredients.splice(toIndex, 0, movedIngredient);
       state.constructorItems.ingredients = ingredients;
     }
+  },
+  selectors: {
+    getIngredientsConstructor: (state) => state.constructorItems,
+    getIngredientsConstructorLoading: (state) => state.isLoading
   }
 });
+
+export const { getIngredientsConstructor, getIngredientsConstructorLoading } =
+  burgerConstructorSlice.selectors;
 export const {
-  addBun,
-  addIngredients,
+  addIngredient,
   removeIngredient,
   setOrderRequest,
   setModalData,

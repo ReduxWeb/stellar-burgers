@@ -5,7 +5,9 @@ import {
   Register,
   Feed,
   ResetPassword,
-  Profile
+  ForgotPassword,
+  Profile,
+  ProfileOrders
 } from '@pages';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
@@ -14,28 +16,27 @@ import { useDispatch, useSelector } from '../../services/store';
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader } from '@components';
+import { AppHeader, IngredientDetails } from '@components';
 import { getUserAction } from '../../services/auth/action';
-import { isAuthChecked } from '../../services/auth/slice';
+import { getIngredients } from '../../services/ingredients/action';
 
 const App = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigation = useNavigate();
+  const location = useLocation();
   const background = location.state?.background;
-  const authChecked = useSelector(isAuthChecked);
 
   useEffect(() => {
-    if (!authChecked) {
-      dispatch(getUserAction());
-    }
-  }, [dispatch, authChecked]);
+    dispatch(getIngredients());
+    dispatch(getUserAction());
+  }, [dispatch]);
   return (
     <>
       <div className={styles.app}>
         <AppHeader />
         <Routes location={background || location}>
           <Route index element={<ConstructorPage />} />
+          <Route path='/ingredients/:id' element={<IngredientDetails />} />
           <Route path='/feed'>
             <Route index element={<Feed />} />
           </Route>
@@ -47,7 +48,14 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path='/forgot-password' element={<ResetPassword />} />
+          <Route
+            path='/profile/orders'
+            element={
+              <ProtectedRoute>
+                <ProfileOrders />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path='/login'
             element={
@@ -64,10 +72,25 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path='/forgot-password'
+            element={
+              <ProtectedRoute onlyUnAuth>
+                <ForgotPassword />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path='/reset-password'
+            element={
+              <ProtectedRoute onlyUnAuth>
+                <ResetPassword />
+              </ProtectedRoute>
+            }
+          />
           <Route path='*' element={<NotFound404 />} />
         </Routes>
       </div>
-      ;
     </>
   );
 };
