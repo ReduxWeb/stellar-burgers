@@ -2,16 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrdersUserAction } from './action';
 
-type TOrderState = {
-  orders: TOrder[] | [];
+type TinitialState = {
+  orders: TOrder[];
   isLoading: boolean;
-  errors?: string | null;
+  errorsMessage?: string | null;
 };
 
-const initialState: TOrderState = {
+const initialState: TinitialState = {
   orders: [],
-  isLoading: false,
-  errors: null
+  isLoading: false
 };
 
 export const ordersSlice = createSlice({
@@ -29,7 +28,7 @@ export const ordersSlice = createSlice({
       })
       .addCase(getOrdersUserAction.rejected, (state, action) => {
         state.isLoading = false;
-        state.errors = action.error.message;
+        state.errorsMessage = action.error.message;
       });
   }
 });

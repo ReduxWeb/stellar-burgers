@@ -36,7 +36,9 @@ const App = () => {
         <AppHeader />
         <Routes location={background || location}>
           <Route index element={<ConstructorPage />} />
-          <Route path='/feed' element={<Feed />} />
+          <Route path='/feed'>
+            <Route index element={<Feed />} />
+          </Route>
           <Route
             path='/profile'
             element={
