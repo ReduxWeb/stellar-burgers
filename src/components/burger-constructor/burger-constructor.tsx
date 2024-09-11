@@ -3,10 +3,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import {
-  getIngredientsConstructorLoading,
   getIngredientsConstructor,
-  setOrderRequest,
-  setModalData,
   clearConstructor
 } from '../../services/burgerConstructor/slice';
 import { getOrder, clearOrder } from '../../services/createOrder/slice';
@@ -17,7 +14,7 @@ export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const constructorItems = useSelector(getIngredientsConstructor);
-  const orderRequest = useSelector(getIngredientsConstructorLoading);
+  const orderRequest = useSelector((state) => state.createOrder.isLoading);
   const orderModalData = useSelector(getOrder);
   const isAuth = useSelector((state) => state.auth.isAuthChecked);
 
@@ -34,6 +31,7 @@ export const BurgerConstructor: FC = () => {
       const order: string[] = [bun._id, ...ingredientIds, bun._id];
       dispatch(createOrderBurger(order));
       console.log(order);
+      console.log(orderRequest);
     }
   };
 

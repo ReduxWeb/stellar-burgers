@@ -30,7 +30,12 @@ export const ordersSlice = createSlice({
         state.isLoading = false;
         state.errorsMessage = action.error.message;
       });
+  },
+  selectors: {
+    setIsLoadingOrder: (state) => state.isLoading
   }
 });
+
+export const { setIsLoadingOrder } = ordersSlice.selectors;
 
 export const orderReducer = ordersSlice.reducer;
