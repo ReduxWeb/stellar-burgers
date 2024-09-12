@@ -47,7 +47,7 @@ export const authSlice = createSlice({
       .addCase(getUserAction.rejected, (state) => {
         state.isLoading = false;
         state.user = null;
-        state.isAuthChecked = true;
+        state.isAuthChecked = false;
         state.errorMessage = null;
       })
       .addCase(loginAction.pending, (state) => {

@@ -9,6 +9,7 @@ import {
 import { getOrder, clearOrder } from '../../services/createOrder/slice';
 import { createOrderBurger } from '../../services/createOrder/action';
 import { useNavigate } from 'react-router-dom';
+import { isAuthChecked } from '../../services/auth/slice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useSelector(getIngredientsConstructor);
   const orderRequest = useSelector((state) => state.createOrder.isLoading);
   const orderModalData = useSelector(getOrder);
-  const isAuth = useSelector((state) => state.auth.isAuthChecked);
+  const isAuth = useSelector(isAuthChecked);
 
   const onOrderClick = () => {
     const { bun, ingredients } = constructorItems;
@@ -24,14 +25,14 @@ export const BurgerConstructor: FC = () => {
     if (!isAuth) {
       return navigate('/login');
     }
+    console.log(isAuth);
     if (!constructorItems.bun || orderRequest) return;
 
-    if (isAuth && bun && ingredients.length > 0) {
+    if (bun && ingredients.length > 0) {
       const ingredientIds = ingredients.map((item) => item._id);
       const order: string[] = [bun._id, ...ingredientIds, bun._id];
       dispatch(createOrderBurger(order));
-      console.log(order);
-      console.log(orderRequest);
+      dispatch(clearConstructor());
     }
   };
 
