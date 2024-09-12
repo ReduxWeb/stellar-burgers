@@ -20,11 +20,13 @@ import { AppHeader, IngredientDetails } from '@components';
 import { getUserAction } from '../../services/auth/action';
 import { getIngredients } from '../../services/ingredients/action';
 import { Modal, OrderInfo } from '@components';
+import { getNumberOrder } from '../../services/createOrder/slice';
 
 const App = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const orderByNumber = useSelector(getNumberOrder) ?? '';
   const background = location.state?.background;
 
   useEffect(() => {
@@ -97,7 +99,10 @@ const App = () => {
             <Route
               path='/feed/:number'
               element={
-                <Modal title={'Детали заказа'} onClose={() => navigate(-1)}>
+                <Modal
+                  title={`#${location.pathname.match(/\d+/)}`}
+                  onClose={() => navigate(-1)}
+                >
                   <OrderInfo />
                 </Modal>
               }
@@ -116,7 +121,10 @@ const App = () => {
             <Route
               path='/profile/orders/:number'
               element={
-                <Modal title={'Детали заказа'} onClose={() => navigate(-1)}>
+                <Modal
+                  title={`#${location.pathname.match(/\d+/)}`}
+                  onClose={() => navigate(-1)}
+                >
                   <ProtectedRoute>
                     <OrderInfo />
                   </ProtectedRoute>

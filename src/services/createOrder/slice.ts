@@ -37,9 +37,10 @@ export const createOrderSlice = createSlice({
       });
   },
   selectors: {
-    getOrder: (state) => state.order
+    getOrder: (state) => state.order,
+    getNumberOrder: (state) => state.order?.number
   }
 });
 
-export const { getOrder } = createOrderSlice.selectors;
+export const { getOrder, getNumberOrder } = createOrderSlice.selectors;
 export const { clearOrder } = createOrderSlice.actions;

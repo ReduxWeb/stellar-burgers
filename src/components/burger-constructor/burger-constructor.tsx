@@ -10,6 +10,7 @@ import { getOrder, clearOrder } from '../../services/createOrder/slice';
 import { createOrderBurger } from '../../services/createOrder/action';
 import { useNavigate } from 'react-router-dom';
 import { isAuthChecked } from '../../services/auth/slice';
+import { Modal } from '../modal';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,6 @@ export const BurgerConstructor: FC = () => {
       const ingredientIds = ingredients.map((item) => item._id);
       const order: string[] = [bun._id, ...ingredientIds, bun._id];
       dispatch(createOrderBurger(order));
-      dispatch(clearConstructor());
     }
   };
 
