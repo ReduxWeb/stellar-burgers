@@ -1,4 +1,4 @@
-import { TUser } from './../../utils/types';
+import { TUser } from '../../utils/types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import {
   getUserApi,
@@ -8,7 +8,7 @@ import {
   loginUserApi,
   registerUserApi,
   logoutApi
-} from '@api';
+} from '../../utils/burger-api';
 import { setCookie, deleteCookie } from '../../utils/cookie';
 import { setIsAuthChecked, setUser } from './slice';
 

@@ -8,14 +8,14 @@ import {
   updateUserAction
 } from './action';
 
-type TInitialState = {
+export type TInitialState = {
   user: TUser | null;
   isLoading: boolean;
   isAuthChecked: boolean; // флаг для статуса проверки токена пользователя
   errorMessage?: string | null;
 };
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
   user: null,
   isLoading: false,
   isAuthChecked: false
@@ -43,12 +43,13 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthChecked = true;
         state.user = action.payload;
+        state.errorMessage = null;
       })
-      .addCase(getUserAction.rejected, (state) => {
+      .addCase(getUserAction.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthChecked = false;
-        state.errorMessage = null;
+        state.errorMessage = action.error.message || null;
       })
       .addCase(loginAction.pending, (state) => {
         state.isLoading = true;
@@ -59,6 +60,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthChecked = true;
         state.user = action.payload;
+        state.errorMessage = null;
       })
       .addCase(loginAction.rejected, (state, action) => {
         state.isLoading = false;
@@ -73,6 +75,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthChecked = true;
         state.user = action.payload;
+        state.errorMessage = null;
       })
       .addCase(registerAction.rejected, (state, action) => {
         state.isLoading = false;
@@ -87,6 +90,7 @@ export const authSlice = createSlice({
         state.isLoading = false;
         state.isAuthChecked = false;
         state.user = null;
+        state.errorMessage = null;
       })
       .addCase(logoutAction.rejected, (state, action) => {
         state.isLoading = false;
@@ -99,6 +103,7 @@ export const authSlice = createSlice({
       .addCase(updateUserAction.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.user;
+        state.errorMessage = null;
       })
       .addCase(updateUserAction.rejected, (state, action) => {
         state.isLoading = false;
