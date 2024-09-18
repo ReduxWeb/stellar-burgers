@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { createOrderBurger } from './action';
 import { TOrder } from '@utils-types';
 
-type TInitialState = {
+export type TInitialState = {
   order: TOrder | null;
   isLoading: boolean;
   errorMessage?: string | null;
 };
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
   order: null,
   isLoading: false
 };
@@ -30,10 +30,11 @@ export const createOrderSlice = createSlice({
       .addCase(createOrderBurger.fulfilled, (state, action) => {
         state.isLoading = false;
         state.order = action.payload.order;
+        state.errorMessage = null;
       })
       .addCase(createOrderBurger.rejected, (state, action) => {
         state.isLoading = false;
-        state.errorMessage = action.error.message;
+        state.errorMessage = action.error.message || null;
       });
   },
   selectors: {

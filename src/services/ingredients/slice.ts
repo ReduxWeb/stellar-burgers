@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getIngredients } from './action';
 import { TIngredient } from '@utils-types';
 
-type TInitialState = {
+export type TInitialState = {
   ingredients: TIngredient[];
   isLoading: boolean;
   errorMessage?: string | null;
 };
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
   ingredients: [],
   isLoading: false
 };

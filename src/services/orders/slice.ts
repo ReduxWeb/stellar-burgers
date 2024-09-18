@@ -2,13 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 import { TOrder } from '@utils-types';
 import { getOrdersUserAction } from './action';
 
-type TinitialState = {
+export type TinitialState = {
   orders: TOrder[];
   isLoading: boolean;
   errorsMessage?: string | null;
 };
 
-const initialState: TinitialState = {
+export const initialState: TinitialState = {
   orders: [],
   isLoading: false
 };

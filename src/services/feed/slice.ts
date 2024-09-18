@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { getFeeds } from './action';
 import { TOrder } from '@utils-types';
 
-type TInitialState = {
+export type TInitialState = {
   feeds: TOrder[];
   total: number;
   totalToday: number;
@@ -10,7 +10,7 @@ type TInitialState = {
   errorMessage?: string | null;
 };
 
-const initialState: TInitialState = {
+export const initialState: TInitialState = {
   feeds: [],
   total: 0,
   totalToday: 0,
