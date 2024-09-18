@@ -1,24 +1,46 @@
 import { FC, useMemo } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
+import {
+  getIngredientsConstructor,
+  clearConstructor
+} from '../../services/burgerConstructor/slice';
+import { getOrder, clearOrder } from '../../services/createOrder/slice';
+import { createOrderBurger } from '../../services/createOrder/action';
+import { useNavigate } from 'react-router-dom';
+import { isAuthChecked } from '../../services/auth/slice';
+import { Modal } from '../modal';
 
 export const BurgerConstructor: FC = () => {
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  const constructorItems = {
-    bun: {
-      price: 0
-    },
-    ingredients: []
-  };
-
-  const orderRequest = false;
-
-  const orderModalData = null;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const constructorItems = useSelector(getIngredientsConstructor);
+  const orderRequest = useSelector((state) => state.createOrder.isLoading);
+  const orderModalData = useSelector(getOrder);
+  const isAuth = useSelector(isAuthChecked);
 
   const onOrderClick = () => {
+    const { bun, ingredients } = constructorItems;
+
+    if (!isAuth) {
+      return navigate('/login');
+    }
+    console.log(isAuth);
     if (!constructorItems.bun || orderRequest) return;
+
+    if (bun && ingredients.length > 0) {
+      const ingredientIds = ingredients.map((item) => item._id);
+      const order: string[] = [bun._id, ...ingredientIds, bun._id];
+      dispatch(createOrderBurger(order));
+    }
   };
-  const closeOrderModal = () => {};
+
+  const closeOrderModal = () => {
+    dispatch(clearOrder());
+    dispatch(clearConstructor());
+    navigate('/', { replace: true });
+  };
 
   const price = useMemo(
     () =>
@@ -29,8 +51,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
-  return null;
 
   return (
     <BurgerConstructorUI
